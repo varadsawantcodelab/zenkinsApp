@@ -3,174 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zenkins - CI/CD Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <title>Zenkins | Elegant Automation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        :root {
-            --jenkins-blue: #14141f;
-            --jenkins-sidebar: #f8f9fa;
-            --success-green: #198754;
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #334155;
         }
-
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #fff; }
-
-        /* Navbar Styling */
-        .navbar { background-color: var(--jenkins-blue); border-bottom: 4px solid #d33833; }
-        .navbar-brand { font-weight: bold; color: white !important; letter-spacing: 1px; }
-
-        /* Sidebar */
-        .sidebar { background-color: var(--jenkins-sidebar); min-height: calc(100vh - 56px); border-right: 1px solid #dee2e6; }
-        .nav-link { color: #333; transition: 0.2s; }
-        .nav-link:hover { background-color: #e9ecef; color: #000; }
-        .nav-link.active { font-weight: bold; border-left: 4px solid var(--jenkins-blue); }
-
-        /* Job Table */
-        .status-icon { font-size: 1.2rem; }
-        .status-stable { color: #4e9bd4; } /* Jenkins uses blue for "Success" */
-
-        /* Console Output Simulation */
-        #console-log {
-            background-color: #000;
-            color: #0f0;
-            font-family: 'Courier New', Courier, monospace;
-            padding: 15px;
-            height: 200px;
-            overflow-y: auto;
-            display: none;
-            border-radius: 4px;
+        /* Sidebar Styling */
+        .sidebar {
+            height: 100vh;
+            background: #ffffff;
+            border-right: 1px solid #e2e8f0;
+            position: fixed;
+            width: 260px;
+        }
+        .nav-link {
+            color: #64748b;
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+        .nav-link:hover, .nav-link.active {
+            background-color: #f1f5f9;
+            color: #2563eb;
+        }
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            padding: 2rem;
+        }
+        /* Zenkins Card Style */
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+        }
+        .status-pill {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .status-success { background: #dcfce7; color: #15803d; }
+        .status-building { background: #dbeafe; color: #1d4ed8; }
+        .status-failed { background: #fee2e2; color: #b91c1c; }
+        
+        .btn-zenkins {
+            background-color: #2563eb;
+            color: white;
+            border-radius: 8px;
+            padding: 8px 20px;
+        }
+        .btn-zenkins:hover {
+            background-color: #1d4ed8;
+            color: white;
         }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-dark sticky-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <i class="bi bi-robot me-2"></i>ZENKINS
-            </a>
-            <div class="d-flex text-white-50 small">
-                <span class="me-3">admin | logout</span>
-            </div>
+    <div class="sidebar d-none d-lg-block">
+        <div class="p-4">
+            <h3 class="fw-bold text-primary mb-0">Zenkins</h3>
+            <small class="text-muted">Pipeline Harmony</small>
         </div>
-    </nav>
+        <nav class="nav flex-column">
+            <a class="nav-link active" href="#"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            <a class="nav-link" href="#"><i data-lucide="plus-circle"></i> New Item</a>
+            <a class="nav-link" href="#"><i data-lucide="users"></i> People</a>
+            <a class="nav-link" href="#"><i data-lucide="history"></i> Build History</a>
+            <a class="nav-link" href="#"><i data-lucide="settings"></i> Manage Zenkins</a>
+            <hr class="mx-3">
+            <a class="nav-link text-danger" href="#"><i data-lucide="log-out"></i> Logout</a>
+        </nav>
+    </div>
 
-    <div class="container-fluid">
-        <div class="row">
-            <nav class="col-md-2 d-none d-md-block sidebar py-3">
-                <ul class="nav flex-column">
-                    <li class="nav-item"><a class="nav-link active" href="#"><i class="bi bi-plus-circle me-2"></i> New Item</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-people me-2"></i> People</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-clock-history me-2"></i> Build History</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-gear me-2"></i> Manage Zenkins</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-search me-2"></i> Credentials</a></li>
-                </ul>
-            </nav>
+    <div class="main-content">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <div>
+                <h4 class="fw-semibold">All Jobs</h4>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="#" class="text-decoration-none">Zenkins</a></li>
+                        <li class="breadcrumb-item active">Dashboard</li>
+                    </ol>
+                </nav>
+            </div>
+            <button class="btn btn-zenkins d-flex align-items-center gap-2">
+                <i data-lucide="play" size="18"></i> Run All Pipelines
+            </button>
+        </div>
 
-            <main class="col-md-10 ms-sm-auto px-md-4 py-4">
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Dashboard</h1>
-                    <div class="btn-toolbar mb-2 mb-md-0">
-                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addJob()">
-                            <i class="bi bi-hammer me-1"></i> Add Build Job
-                        </button>
-                    </div>
-                </div>
-
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>S</th>
-                                <th>W</th>
-                                <th>Job Name</th>
-                                <th>Last Success</th>
-                                <th>Last Failure</th>
-                                <th>Last Duration</th>
-                                <th>Console</th>
-                            </tr>
-                        </thead>
-                        <tbody id="job-body">
-                            <tr>
-                                <td><i class="bi bi-check-circle-fill status-stable"></i></td>
-                                <td><i class="bi bi-brightness-high text-warning"></i></td>
-                                <td><strong>Production-Deploy</strong></td>
-                                <td>2 days ago (#42)</td>
-                                <td>N/A</td>
-                                <td>1 min 20 sec</td>
-                                <td><button class="btn btn-sm btn-link" onclick="runBuild('Production-Deploy')"><i class="bi bi-play-fill text-success"></i></button></td>
-                            </tr>
-                            <tr>
-                                <td><i class="bi bi-x-circle-fill text-danger"></i></td>
-                                <td><i class="bi bi-cloud-rain text-secondary"></i></td>
-                                <td><strong>Frontend-Unit-Tests</strong></td>
-                                <td>3 hours ago (#12)</td>
-                                <td>10 min ago (#13)</td>
-                                <td>45 sec</td>
-                                <td><button class="btn btn-sm btn-link" onclick="runBuild('Frontend-Unit-Tests')"><i class="bi bi-play-fill text-success"></i></button></td>
-                            </tr>
+        <div class="card p-4">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="text-muted">
+                        <tr>
+                            <th scope="col" class="border-0">S</th>
+                            <th scope="col" class="border-0">Job Name</th>
+                            <th scope="col" class="border-0">Last Success</th>
+                            <th scope="col" class="border-0">Last Failure</th>
+                            <th scope="col" class="border-0">Duration</th>
+                            <th scope="col" class="border-0 text-end">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="job-table-body">
                         </tbody>
-                    </table>
-                </div>
-
-                <div id="console-area" class="mt-5">
-                    <h5 id="console-title"></h5>
-                    <div id="console-log"></div>
-                </div>
-            </main>
+                </table>
+            </div>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function runBuild(jobName) {
-            const consoleArea = document.getElementById('console-log');
-            const consoleTitle = document.getElementById('console-title');
+        // Mock Data for Zenkins Jobs
+        const jobs = [
+            { name: "Frontend-CI", status: "success", lastSuccess: "2 min ago", lastFail: "N/A", duration: "45s" },
+            { name: "Backend-API-Deployment", status: "building", lastSuccess: "1 hr ago", lastFail: "Yesterday", duration: "3m 12s" },
+            { name: "Mobile-App-Android", status: "failed", lastSuccess: "3 days ago", lastFail: "10 min ago", duration: "1m 05s" },
+            { name: "Infrastructure-Terraform", status: "success", lastSuccess: "5 min ago", lastFail: "1 week ago", duration: "12m 30s" }
+        ];
+
+        function renderJobs() {
+            const tableBody = document.getElementById('job-table-body');
+            tableBody.innerHTML = jobs.map(job => `
+                <tr>
+                    <td>
+                        <span class="status-pill ${getStatusClass(job.status)}">
+                            ${job.status.charAt(0).toUpperCase() + job.status.slice(1)}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="fw-semibold">${job.name}</div>
+                        <small class="text-muted">main branch</small>
+                    </td>
+                    <td>${job.lastSuccess}</td>
+                    <td>${job.lastFail}</td>
+                    <td>${job.duration}</td>
+                    <td class="text-end">
+                        <button class="btn btn-sm btn-outline-primary me-1" onclick="alert('Starting ${job.name}...')">
+                            <i data-lucide="play" style="width:16px"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary">
+                            <i data-lucide="settings" style="width:16px"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
             
-            consoleArea.style.display = 'block';
-            consoleArea.innerHTML = '';
-            consoleTitle.innerText = `Console Output: ${jobName}`;
-
-            const logs = [
-                `[INFO] Starting build for ${jobName}...`,
-                `[INFO] Checking out source code from git...`,
-                `[INFO] Fetching dependencies...`,
-                `[WARNING] 12 vulnerabilities found in npm packages.`,
-                `[INFO] Running build scripts...`,
-                `[SUCCESS] Build completed in 0.45 seconds.`,
-                `[INFO] Archiving artifacts...`,
-                `Finished: SUCCESS`
-            ];
-
-            let i = 0;
-            const interval = setInterval(() => {
-                if (i < logs.length) {
-                    consoleArea.innerHTML += logs[i] + "<br>";
-                    consoleArea.scrollTop = consoleArea.scrollHeight;
-                    i++;
-                } else {
-                    clearInterval(interval);
-                }
-            }, 600);
+            // Re-initialize icons for dynamic content
+            lucide.createIcons();
         }
 
-        function addJob() {
-            const name = prompt("Enter Job Name:");
-            if (name) {
-                const tbody = document.getElementById('job-body');
-                const row = `
-                    <tr>
-                        <td><i class="bi bi-dash-circle text-muted"></i></td>
-                        <td><i class="bi bi-cloud text-muted"></i></td>
-                        <td><strong>${name}</strong></td>
-                        <td>N/A</td>
-                        <td>N/A</td>
-                        <td>0 sec</td>
-                        <td><button class="btn btn-sm btn-link" onclick="runBuild('${name}')"><i class="bi bi-play-fill text-success"></i></button></td>
-                    </tr>
-                `;
-                tbody.innerHTML += row;
+        function getStatusClass(status) {
+            switch(status) {
+                case 'success': return 'status-success';
+                case 'building': return 'status-building';
+                case 'failed': return 'status-failed';
+                default: return '';
             }
         }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderJobs();
+            lucide.createIcons();
+        });
     </script>
 </body>
 </html>
