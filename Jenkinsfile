@@ -23,8 +23,8 @@ pipeline {
                 script {
                     // Copy index.html to the web server directory
                     // Using sudo might require 'visudo' configuration for the jenkins user
-                    sh "sudo rm -rf ${env.DEST_DIR}/*"
-                    sh "sudo cp index.html ${env.DEST_DIR}/"
+                    sh "rm -rf ${env.DEST_DIR}/*"
+                    sh "cp index.html ${env.DEST_DIR}/"
                 }
             }
         }
